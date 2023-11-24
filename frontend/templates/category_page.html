@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ category.name }} Products</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            padding: 20px;
+        }
+        .product-card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .product-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .product-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .product-price {
+            font-size: 16px;
+            margin-top: 5px;
+        }
+        .product-quantity {
+            font-size: 16px;
+            margin-top: 5px;
+        }
+        .add-to-cart-btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        .add-to-cart-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>{{ category.name }} Products</h2>
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-4">
+            <div class="product-card">
+                <div class="product-name">{{ product.name }}</div>
+                <div class="product-price">Price: ${{ product.price }}</div>
+                <div class="product-quantity">Available: {{ product.quantity_available }}</div>
+                <!-- <a href="#" class="add-to-cart-btn" onclick="addToCart('{{ product.id }}')">Add to Cart</a> -->
+                <form action="/add_to_cart" method="POST">
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                    <button type="submit" class="add-to-cart-btn">Add to Cart</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<script>
+    function addToCart(productId) {
+        $.post(`/add_to_cart/${productId}`, function (response) {
+            alert(response.message);
+        }).fail(function (error) {
+            alert(error.responseJSON.message);
+        });
+    }
+</script>
+</body>
+</html>

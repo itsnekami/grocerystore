@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Categories</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+        }
+        .navbar {
+            background-color: #212529;
+            color: #fff;
+            padding: 10px 0;
+            margin-bottom: 20px;
+        }
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .navbar-toggler-icon {
+            background-color: #fff;
+        }
+        .navbar-summary,
+        .navbar-logout {
+            border: none;
+            color: #fff;
+            padding: 5px 15px;
+            border-radius: 5px;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-left: 10px;
+            transition: background-color 0.3s;
+        }
+        .navbar-summary:hover,
+        .navbar-logout:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .category-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: box-shadow 0.3s;
+        }
+        .category-card:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+        .category-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+
+        .button-group {
+           margin-top: 10px;
+        }
+        }
+        .add-product-button {
+            background-color: #007bff;
+            border: none;
+            color: #fff;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .add-product-button:hover {
+            background-color: #0056b3;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        .edit-button,
+        .delete-button {
+            background-color: #ffc107;
+            border: none;
+            color: #fff;
+            padding: 5px 15px;
+            border-radius: 5px;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+        .edit-button:hover,
+        .delete-button:hover {
+            background-color: #e0a800;
+        }
+        .add-category-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #28a745;
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+        }
+        .add-category-button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <h2 class="navbar-brand mb-0">{{user_name}}'s Dashboard</h2>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link navbar-summary" href="#">Summary</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-logout" href="#">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <div class="row">
+            {% if categories %}
+                {% for category in categories %}
+                <div class="col-md-4">
+                    <div class="category-card">
+                        <div class="category-name">{{ category.name }}</div>
+                        <div>
+                            
+                        </div>
+                        <a href="{{ url_for('add_product', category_id=category.id) }}" class="add-product-button" >+</a>
+                        {% if category.products %}
+                            <a href="{{ url_for('admin_products', category_id=category.id) }}" class="btn btn-primary">View Products</a>
+                        {% else %}
+                            <p>No Products Available</p>
+                        {% endif %}
+                        <div class="action-buttons">
+                            <a href="{{ url_for('edit_category', category_id=category.id) }}" class="edit-button">Edit</a>
+                            <a href="{{ url_for('delete_category', category_id=category.id) }}" class="delete-button">Delete</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-md-12 text-center">
+                    <p class="mt-5">No Categories Available</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <a href="{{ url_for('add_category') }}" class="add-category-button">Add New Category</a>
+</body>
+</html>

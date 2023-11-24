@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ category.name }} Products - Admin</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .table-responsive {
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0 auto;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .edit-button,
+        .delete-button {
+            background-color: #007bff;
+            border: none;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .edit-button:hover,
+        .delete-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="mb-4">{{ category.name }} Products</h2>
+  
+        <a href="{{ url_for('add_product', category_id=category.id) }}" class="btn btn-primary mb-3">Add Product</a>
+
+        <div class="table-responsive">
+            {% if products %}
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Quantity Available</th>
+                        <th>Manufacture Date</th>
+                        <th>Expiry Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                        <tr>
+                            <td>{{ product.name }}</td>
+                            <td>${{ product.price }}</td>
+                            <td>{{ product.quantity_available }}</td>
+                            <td>{{ product.manufacture_date }}</td>
+                            <td>{{ product.expiry_date }}</td>
+                            <td class="action-buttons">
+                                <a href="{{ url_for('edit_product', category_id=category.id, product_id=product.id) }}" class="btn btn-secondary edit-button">Edit</a>
+                                <a href="{{ url_for('delete_product', category_id=category.id, product_id=product.id) }}" class="btn btn-danger delete-button">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No products available in this category.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

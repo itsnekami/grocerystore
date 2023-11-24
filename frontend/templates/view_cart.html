@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Cart</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .quantity {
+            display: flex;
+            align-items: center;
+        }
+        .quantity-label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .quantity-btn {
+            cursor: pointer;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .quantity-btn:hover {
+            background-color: #0056b3;
+        }
+        .quantity-value {
+            margin: 0 10px;
+        }
+        .total-amount {
+            margin-top: 20px;
+            text-align: right;
+        }
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>View Cart</h1>
+        {% if user %}
+            <p>Welcome, {{ user.username }}</p>
+        {% endif %}
+        {% if cart %}
+            <h2>Cart Contents:</h2>
+            <ul>
+                {% for cart_item in cart_items %}
+                    <li>
+                        <div>
+                            <h4>{{ cart_item.product.name }}</h4>
+                            <form action="{{ url_for('update_quantity', cart_item_id=cart_item.id) }}" method="POST">
+                                <div class="quantity">
+                                    <span class="quantity-label">Quantity:</span>
+                                    <button type="submit" class="quantity-btn" name="action" value="decrease">-</button>
+                                    <span class="quantity-value">{{ cart_item.quantity }}</span>
+                                    <button type="submit" class="quantity-btn" name="action" value="increase">+</button>
+                                </div>
+                            </form>
+                            Unit Price: ${{ cart_item.product.price }}
+                        </div>
+                        <div>
+                            Total Price: ${{ cart_item.total_price }}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            <p class="total-amount">Total Cart Amount: ${{ cart.total_amount }}</p>
+            <form action="{{ url_for('checkout') }}" method="POST">
+                <button type="submit" class="btn btn-primary">Checkout</button>
+            </form>
+        {% else %}
+            <p>No active cart for this user.</p>
+        {% endif %}
+        <a href="{{ url_for('index') }}" class="back-link">Back to Store</a>
+    </div>
+</body>
+</html>
